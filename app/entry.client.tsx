@@ -11,7 +11,7 @@ import { hydrateRoot } from "react-dom/client";
 function Client()  {
   const client = new ApolloClient({
     cache: new InMemoryCache().restore(window.__APOLLO_STATE__),
-    uri: 'http://localhost:8080/graphq'
+    uri: 'http://localhost:8080/graphql'
   })
 
   return (
