@@ -5,16 +5,22 @@ interface CardProps {
   children: ReactElement
 }
 
-export function CardBottom({ children }: CardProps) {
+export function CardBottom({ children, className }: CardProps) {
+  const classes = `mt-6 text-xs text-slate-400 ${className}`
   return (
-    <div className="mt-6 text-xs text-slate-400">
+    <div className={classes}>
       {children}
     </div>
   )
 }
 
-export function CardContent({ children }: CardProps) {
-  return children
+export function CardContent({ children, className }: CardProps) {
+  const classes = `${className}`
+  return (
+    <div className={classes}>
+      {children}
+    </div>
+  )
 }
 
 export function CardSeparator() {

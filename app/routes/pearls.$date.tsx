@@ -1,5 +1,5 @@
 import type {LoaderArgs} from "@remix-run/node";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import {useLoaderData} from "@remix-run/react";
 import { Card, CardTitle, CardSeparator, CardContent, CardBottom } from '~/components/card'
 
@@ -33,20 +33,20 @@ export default function Pearls() {
   const pearls = data?.getByDate?.map((result: GetByDateResult) => (
     <Card key={result.name} className='w-80'>
       <CardTitle>
-        <h2>{result.name}</h2>
+        <h2 className="no-underline font-semibold">{result.name}</h2>
       </CardTitle>
-      <CardContent>
+      <CardContent className="h-32 overflow-y-auto">
         <p>{result.notes}</p>
       </CardContent>
       <CardSeparator />
-      <CardBottom>
+      <CardBottom className="h-10 overflow-y-auto">
         <p>{result.turd}</p>
       </CardBottom>
     </Card>
   ))
   return (
     <div className="bg-purple-50 h-screen flex items-center justify-center drop-shadow-md">
-      <div className="bg-slate-50 h-1/3 w-11/12 rounded-lg drop-shadow-lg overflow-x-auto flex items-center justify-start">
+      <div className="bg-slate-50 h-2/5 w-11/12 rounded-lg drop-shadow-lg overflow-x-auto flex items-center justify-start">
         {pearls}
       </div>
     </div>
