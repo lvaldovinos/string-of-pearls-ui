@@ -1,7 +1,8 @@
 import type {LoaderArgs} from "@remix-run/node";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import {useLoaderData} from "@remix-run/react";
 import { Card, CardTitle, CardSeparator, CardContent, CardBottom } from '~/components/card'
+import {useRef, useEffect} from "react";
 
 const GET_BY_DATE = gql`
   query GetByDate($date: String!) {
@@ -24,6 +25,7 @@ export function loader({ params }: LoaderArgs) {
 }
 
 export default function Pearls() {
+  const myRef = useRef<HTMLElement>(null)
   const date = useLoaderData<typeof loader>()
   const { data } = useQuery(GET_BY_DATE, {
     variables: {
@@ -44,11 +46,17 @@ export default function Pearls() {
       </CardBottom>
     </Card>
   ))
+  useEffect(() => {
+    if (myRef.current) {
+      myRef.current.scrollIntoView()
+    }
+  }, [])
   return (
-    <div className="bg-purple-50 h-screen flex items-center justify-center drop-shadow-md">
-      <div className="bg-slate-50 h-2/5 w-11/12 rounded-lg drop-shadow-lg overflow-x-auto flex items-center justify-start">
-        {pearls}
-      </div>
-    </div>
+    <section
+      ref={myRef}
+      className="bg-slate-50 rounded-lg drop-shadow-lg overflow-x-auto flex items-center justify-start"
+    >
+      {pearls}
+    </section>
   )
 }

@@ -1,9 +1,8 @@
-import type { V2_MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react"
 import { gql, useQuery, useMutation } from "@apollo/client";
-import { Card, CardTitle } from '~/components/card'
+import { Collapsable } from '../components/collapsable'
 import type {SyntheticEvent} from "react";
 import { useRef, useEffect } from 'react'
+import {Outlet, RouteMatch, useMatches} from "@remix-run/react";
 
 const GET_ALL_QUERY = gql`
   query GetAll {
@@ -25,8 +24,8 @@ const CREATE_PEARL = gql`
 `
 
 interface StringOfPearlResult {
-  date: String;
-  total: Number;
+  date: string;
+  total: number;
 }
 
 export const meta: V2_MetaFunction = () => {
@@ -41,20 +40,23 @@ export default function Index() {
       GET_ALL_QUERY
     ]
   })
-  const stringOfPearls = data?.getAll?.map((result : StringOfPearlResult) => (
-    <Card key={result.date}>
-      <CardTitle>
-        <div className="relative">
-          <h3 className="font-medium tracking-wide">
-            <Link to={`/pearls/${result.date}`}>{result.date}</Link>
-          </h3>
-          <div className="absolute top-6 left-0 font-medium text-sm text-slate-500 font-mono mb-3 dark:text-slate-400">
-            {result.total.toString()}
-          </div>
-        </div> 
-      </CardTitle>
-    </Card>
-  ))
+  const matches = useMatches()
+  const stringOfPearls = data?.getAll?.map((result : StringOfPearlResult) => {
+    const matchWithUrl = matches.findIndex((value: RouteMatch) => {
+      return value.pathname === `/string-of-pearls/pearls/${result.date}`
+    }) >= 0
+    return (
+      <Collapsable
+        key={result.date}
+        shown={matchWithUrl}
+        linkTo={`pearls/${result.date}`}
+        title={result.date}
+        subTitle={result.total.toString()}
+      >
+        <Outlet />
+      </Collapsable>
+    )
+  })
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
@@ -115,7 +117,7 @@ export default function Index() {
             </div>
           </div>
         </form>
-      <div className='bg-purple-50 rounded-lg max-h-screen overflow-y-auto'>
+      <div className='bg-purple-50 rounded-lg py-8'>
         {stringOfPearls}
       </div>
     </div>
