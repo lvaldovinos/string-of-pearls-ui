@@ -58,13 +58,19 @@ export default function Index() {
     )
   })
 
+  const getCurrentDate = (): string => {
+    const now = new Date()
+    const formatMonthAndDate = (unit: number): string => {
+      return `${unit < 10 ? `0${unit}` : unit}`
+    }
+    return `${now.getFullYear()}-${formatMonthAndDate(now.getMonth() + 1)}-${formatMonthAndDate(now.getDate())}`
+  }
+
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
-    const now = new Date()
-    const date = `${now.getFullYear()}-${now.getMonth() < 10 ? `0${now.getMonth() + 1}` : now.getMonth() + 1}-${now.getDate()}`
     const formData = new FormData(formRef.current)
     const pearl = {
-      date,
+      date: getCurrentDate(),
       ...Object.fromEntries(formData)
     }
     createPearl({
